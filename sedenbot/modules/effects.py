@@ -171,4 +171,80 @@ def slowedtoperfection(message):
         message.delete()
 
 
+@sedenify(pattern='^.vibrato$')
+def vibrato(message):
+    reply = message.reply_to_message
+
+    if not (
+        reply
+        and (
+            reply.audio
+            or reply.voice
+            or (reply.document and 'audio' in reply.document.mime_type)
+        )
+    ):
+        edit(message, f'`{get_translation("wrongMedia")}`')
+    else:
+        edit(message, f'`{get_translation("applyVibrato")}`')
+        media = download_media_wc(reply)
+
+        filename = f'{media}.mp3'
+        if path.exists(filename):
+            remove(filename)
+
+        process = Popen(
+            [
+                'ffmpeg',
+                '-i',
+                media,
+                '-af',
+                'vibrato=f=10:d=1',
+                filename,
+            ]
+        )
+        process.communicate()
+        edit(message, f'`{get_translation("uploadMedia")}`')
+        reply_audio(reply or message, f'{media}.mp3', delete_file=True)
+        remove(media)
+        message.delete()
+
+
+@sedenify(pattern='^.phaser$')
+def vibrato(message):
+    reply = message.reply_to_message
+
+    if not (
+        reply
+        and (
+            reply.audio
+            or reply.voice
+            or (reply.document and 'audio' in reply.document.mime_type)
+        )
+    ):
+        edit(message, f'`{get_translation("wrongMedia")}`')
+    else:
+        edit(message, f'`{get_translation("applyPhaser")}`')
+        media = download_media_wc(reply)
+
+        filename = f'{media}.mp3'
+        if path.exists(filename):
+            remove(filename)
+
+        process = Popen(
+            [
+                'ffmpeg',
+                '-i',
+                media,
+                '-af',
+                'aphaser=type=t:speed=2:decay=0.6',
+                filename,
+            ]
+        )
+        process.communicate()
+        edit(message, f'`{get_translation("uploadMedia")}`')
+        reply_audio(reply or message, f'{media}.mp3', delete_file=True)
+        remove(media)
+        message.delete()
+
+
 HELP.update({'effects': get_translation('effectsInfo')})

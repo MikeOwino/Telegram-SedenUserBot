@@ -43,8 +43,7 @@ def kang(client, message):
 
     reply = message.reply_to_message
     if not reply:
-        edit(message, f'`{get_translation("stickerUsage")}`')
-        return
+        return edit(message, f'`{get_translation("stickerUsage")}`')
 
     anim = False
     video = False
@@ -57,8 +56,7 @@ def kang(client, message):
         video = reply.animation or reply.sticker and reply.sticker.is_video
         media = download_media_wc(reply, sticker_orig=anim or video)
     else:
-        edit(message, f'`{get_translation("stickerError")}`')
-        return
+        return edit(message, f'`{get_translation("stickerError")}`')
 
     if not anim and reply.sticker:
         try:
@@ -72,9 +70,8 @@ def kang(client, message):
                 video = True
             else:
                 media = sticker_resize(media)
-        except BaseException as e:
-            edit(message, f'`{get_translation("stickerError")}`')
-            return
+        except BaseException:
+            return edit(message, f'`{get_translation("stickerError")}`')
 
     if len(args) < 1:
         args = '1'
@@ -142,8 +139,7 @@ def kang(client, message):
             return create_new(conv, pack, pname, pnick)
         msg = send_recv(conv, media, doc=True)
         if 'Sorry' in msg.text:
-            edit(message, f'`{get_translation("stickerError")}`')
-            return
+            return edit(message, f'`{get_translation("stickerError")}`')
         send_recv(conv, emoji)
         send_recv(conv, '/publish')
         if anim or video:
@@ -185,8 +181,7 @@ def kang(client, message):
 
         status = send_recv(conv, media, doc=True)
         if ('Sorry' or ('duration is too long' or 'File is too big')) in status.text:
-            edit(message, get_translation('botError', ['`', '**', chat]))
-            return
+            return edit(message, get_translation('botError', ['`', '**', chat]))
         send_recv(conv, emoji)
         send_recv(conv, '/done')
         return True
@@ -223,8 +218,7 @@ def getsticker(message):
     args = extract_args(message)
     reply = message.reply_to_message
     if not reply or not reply.sticker:
-        edit(message, f'`{get_translation("replySticker")}`')
-        return
+        return edit(message, f'`{get_translation("replySticker")}`')
 
     video = False
     photo = False
@@ -253,12 +247,10 @@ def getsticker(message):
 def packinfo(client, message):
     reply = message.reply_to_message
     if not reply:
-        edit(message, f'`{get_translation("packinfoError")}`')
-        return
+        return edit(message, f'`{get_translation("packinfoError")}`')
 
     if not reply.sticker:
-        edit(message, f'`{get_translation("packinfoError2")}`')
-        return
+        return edit(message, f'`{get_translation("packinfoError2")}`')
 
     edit(message, f'`{get_translation("processing")}`')
 
