@@ -9,9 +9,9 @@
 
 from os import name
 
-if name == 'nt':
-    print('Uninstall Windows to use this bot')
-    quit(1)
+# if name == 'nt':
+#     print('Uninstall Windows to use this bot')
+#     quit(1)
 
 from distutils.util import strtobool as sb
 from importlib import import_module
